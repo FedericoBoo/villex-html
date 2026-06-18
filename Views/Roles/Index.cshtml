@@ -1,0 +1,64 @@
+@model List<Rol>
+@{ ViewData["Title"] = "Roles"; }
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h2 class="mb-0" style="color:#6366f1; font-weight:700;">Gestion de Roles</h2>
+        <small class="text-secondary">Listado completo de roles del sistema</small>
+    </div>
+    <a asp-action="Crear" class="btn btn-villex">
+        <i class="ti ti-plus"></i> Nuevo rol
+    </a>
+</div>
+
+@if (TempData["Exito"] != null)
+{
+    <div class="alert alert-success d-flex align-items-center gap-2 mb-3">
+        <i class="ti ti-circle-check"></i> @TempData["Exito"]
+    </div>
+}
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger d-flex align-items-center gap-2 mb-3">
+        <i class="ti ti-alert-circle"></i> @TempData["Error"]
+    </div>
+}
+
+<div class="card-villex p-0 overflow-hidden">
+    <table class="table table-villex mb-0">
+        <thead>
+            <tr>
+                <th style="width:60px">ID</th>
+                <th>Nombre</th>
+                <th>Descripcion</th>
+                <th style="width:160px" class="text-center">Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (!Model.Any())
+            {
+                <tr><td colspan="4" class="text-center text-secondary py-4">No hay roles registrados.</td></tr>
+            }
+            @foreach (var rol in Model)
+            {
+                <tr>
+                    <td class="text-secondary">@rol.IdRol</td>
+                    <td><strong>@rol.Nombre</strong></td>
+                    <td class="text-secondary">@rol.Descripcion</td>
+                    <td class="text-center">
+                        <a asp-action="Editar" asp-route-id="@rol.IdRol"
+                           class="btn btn-sm btn-outline-light me-1">
+                            <i class="ti ti-pencil"></i>
+                        </a>
+                        <form asp-action="Eliminar" asp-route-id="@rol.IdRol" method="post" class="d-inline"
+                              onsubmit="return confirm('Seguro que queres eliminar el rol @rol.Nombre?')">
+                            <button type="submit" class="btn btn-sm btn-outline-danger">
+                                <i class="ti ti-trash"></i>
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
