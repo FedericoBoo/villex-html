@@ -7,8 +7,11 @@
 <div class="roles-header">
     <div>
         <div class="roles-eyebrow">Gestión de accesos</div>
-        <h2 class="roles-title">Usuarios del sistema</h2>
-        <p class="roles-subtitle">@Model.Count usuario@(Model.Count != 1 ? "s" : "") registrado@(Model.Count != 1 ? "s" : "")</p>
+        <h2 class="roles-title">Usuarios del Sistema</h2>
+        <p class="roles-subtitle">
+            <span class="badge-count">@Model.Count</span>
+            usuario@(Model.Count != 1 ? "s" : "") registrado@(Model.Count != 1 ? "s" : "")
+        </p>
     </div>
     <a asp-action="Crear" class="btn-nuevo-rol">
         <i class="ti ti-user-plus"></i> Nuevo usuario
@@ -28,8 +31,13 @@
     </div>
 }
 
+<div class="search-bar-wrap">
+    <i class="ti ti-search search-icon"></i>
+    <input type="text" id="buscarUsuario" class="search-input" placeholder="Buscar por nombre de usuario…" oninput="filtrarUsuarios()" />
+</div>
+
 <div class="tabla-wrap">
-    <table class="tabla-roles">
+    <table class="tabla-roles" id="tablaUsuarios">
         <thead>
             <tr>
                 <th class="col-id">ID</th>
@@ -91,30 +99,46 @@
         letter-spacing: 0.12em;
         text-transform: uppercase;
         color: #6366f1;
-        font-weight: 600;
-        margin-bottom: 0.15rem;
+        font-weight: 700;
+        margin-bottom: 0.2rem;
     }
 
     .roles-title {
-        font-size: 1.75rem;
+        font-size: 2.2rem;
         font-weight: 800;
-        color: #000 !important;
-        margin: 0 0 0.15rem;
+        color: #000000 !important;
+        -webkit-text-fill-color: #000000;
+        margin: 0 0 0.3rem 0;
         letter-spacing: -0.02em;
-        -webkit-text-fill-color: #000;
     }
 
     .roles-subtitle {
         font-size: 0.82rem;
-        color: #64748b;
+        color: #94a3b8;
         margin: 0;
+        display: flex;
+        align-items: center;
+        gap: 0.4rem;
+    }
+
+    .badge-count {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        background: linear-gradient(135deg, #6366f1, #8b5cf6);
+        color: white;
+        font-size: 0.72rem;
+        font-weight: 700;
+        padding: 0.1rem 0.5rem;
+        border-radius: 20px;
+        min-width: 24px;
     }
 
     .btn-nuevo-rol {
         display: inline-flex;
         align-items: center;
         gap: 0.4rem;
-        background: linear-gradient(135deg,#6366f1,#8b5cf6);
+        background: linear-gradient(135deg, #6366f1, #8b5cf6);
         color: white;
         border: none;
         border-radius: 10px;
@@ -123,13 +147,13 @@
         font-weight: 600;
         text-decoration: none;
         cursor: pointer;
-        transition: opacity .15s,transform .1s;
+        transition: opacity 0.15s, transform 0.1s;
         white-space: nowrap;
-        box-shadow: 0 4px 14px rgba(99,102,241,.35);
+        box-shadow: 0 4px 14px rgba(99,102,241,0.35);
     }
 
         .btn-nuevo-rol:hover {
-            opacity: .9;
+            opacity: 0.9;
             transform: translateY(-1px);
             color: white;
         }
@@ -161,6 +185,43 @@
         border: 1px solid #7f1d1d;
         color: #fca5a5;
     }
+
+    .search-bar-wrap {
+        position: relative;
+        margin-bottom: 1rem;
+    }
+
+    .search-icon {
+        position: absolute;
+        left: 0.9rem;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #475569;
+        font-size: 0.95rem;
+        pointer-events: none;
+    }
+
+    .search-input {
+        width: 100%;
+        background: #1e293b;
+        border: 1px solid #334155;
+        border-radius: 10px;
+        color: #f8fafc;
+        padding: 0.55rem 1rem 0.55rem 2.4rem;
+        font-size: 0.85rem;
+        outline: none;
+        transition: border-color 0.15s, box-shadow 0.15s;
+        box-sizing: border-box;
+    }
+
+        .search-input::placeholder {
+            color: #475569;
+        }
+
+        .search-input:focus {
+            border-color: #6366f1;
+            box-shadow: 0 0 0 3px rgba(99,102,241,0.18);
+        }
 
     .tabla-wrap {
         background: #1e293b;
@@ -199,7 +260,7 @@
 
     .tabla-roles tbody tr {
         border-bottom: 1px solid #243044;
-        transition: background .12s;
+        transition: background 0.12s;
     }
 
         .tabla-roles tbody tr:last-child {
@@ -248,6 +309,7 @@
     .rol-desc {
         color: #64748b;
         font-size: 0.8rem;
+        letter-spacing: 0.05em;
     }
 
     .acciones-wrap {
@@ -267,13 +329,13 @@
         background: transparent;
         cursor: pointer;
         font-size: 0.85rem;
-        transition: background .13s,border-color .13s,color .13s;
+        transition: background 0.13s, border-color 0.13s, color 0.13s;
         text-decoration: none;
         color: #94a3b8;
     }
 
     .btn-eliminar:hover {
-        background: rgba(239,68,68,.12);
+        background: rgba(239,68,68,0.12);
         border-color: #ef4444;
         color: #f87171;
     }
@@ -288,11 +350,25 @@
         font-size: 2rem;
         display: block;
         margin-bottom: 0.6rem;
-        opacity: .4;
+        opacity: 0.4;
     }
 
     .empty-state p {
         margin-bottom: 0.2rem;
         font-size: 0.85rem;
     }
+
+    .hidden-row {
+        display: none;
+    }
 </style>
+
+<script>
+    function filtrarUsuarios() {
+        const q = document.getElementById('buscarUsuario').value.toLowerCase();
+        document.querySelectorAll('#tablaUsuarios tbody tr').forEach(tr => {
+            const texto = tr.innerText.toLowerCase();
+            tr.classList.toggle('hidden-row', q.length > 0 && !texto.includes(q));
+        });
+    }
+</script>

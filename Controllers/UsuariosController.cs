@@ -22,7 +22,6 @@ namespace VillexMVC.Controllers
         private bool SesionActiva() =>
             !string.IsNullOrEmpty(HttpContext.Session.GetString("Usuario"));
 
-        // ── LISTAR ─────────────────────────────────────
         public IActionResult Index()
         {
             if (!SesionActiva()) return RedirectToAction("Index", "Login");
@@ -32,14 +31,14 @@ namespace VillexMVC.Controllers
             {
                 using SqlConnection conn = GetConnection();
                 conn.Open();
-                string query = "SELECT Id, Usuario FROM Usuarios ORDER BY Id";
+                string query = "SELECT IdUsuario, Usuario FROM Usuarios ORDER BY IdUsuario";
                 using SqlCommand cmd = new SqlCommand(query, conn);
                 using SqlDataReader reader = cmd.ExecuteReader();
                 while (reader.Read())
                 {
                     usuarios.Add(new UsuarioViewModel
                     {
-                        Id = (int)reader["Id"],
+                        Id = (int)reader["IdUsuario"],
                         Username = reader["Usuario"].ToString()!
                     });
                 }
@@ -52,7 +51,6 @@ namespace VillexMVC.Controllers
             return View(usuarios);
         }
 
-        // ── CREAR ───────────────────────────────────────
         [HttpGet]
         public IActionResult Crear()
         {
@@ -107,7 +105,6 @@ namespace VillexMVC.Controllers
             }
         }
 
-        // ── ELIMINAR ────────────────────────────────────
         [HttpPost]
         public IActionResult Eliminar(int id)
         {
@@ -117,7 +114,7 @@ namespace VillexMVC.Controllers
             {
                 using SqlConnection conn = GetConnection();
                 conn.Open();
-                string query = "DELETE FROM Usuarios WHERE Id = @Id";
+                string query = "DELETE FROM Usuarios WHERE IdUsuario = @Id";
                 using SqlCommand cmd = new SqlCommand(query, conn);
                 cmd.Parameters.AddWithValue("@Id", id);
                 cmd.ExecuteNonQuery();
