@@ -1,20 +1,20 @@
-@using VillexMVC.Models
-@model Rol
+﻿@using VillexMVC.Models
+@model NuevoUsuarioViewModel
 @{
-    ViewData["Title"] = "Editar Rol";
+    ViewData["Title"] = "Nuevo Usuario";
 }
 
 <div class="form-page-wrap">
     <div class="form-card">
 
         <div class="form-card-header">
-            <div class="form-icon-wrap edit-icon">
-                <i class="ti ti-pencil"></i>
+            <div class="form-icon-wrap">
+                <i class="ti ti-user-plus"></i>
             </div>
             <div>
-                <div class="form-eyebrow">Roles del sistema</div>
-                <h4 class="form-title">Editar rol</h4>
-                <p class="form-subtitle">Modificá los datos del rol seleccionado</p>
+                <div class="form-eyebrow">Gestión de accesos</div>
+                <h4 class="form-title">Nuevo usuario</h4>
+                <p class="form-subtitle">Completá los datos para crear un usuario</p>
             </div>
         </div>
 
@@ -25,30 +25,35 @@
             </div>
         }
 
-        <form asp-action="Editar" method="post" class="form-body">
-            <input type="hidden" asp-for="IdRol" />
+        <form asp-action="Crear" method="post" class="form-body">
 
             <div class="field-group">
-                <label class="field-label" asp-for="Nombre">Nombre del rol</label>
+                <label class="field-label">Nombre de usuario</label>
                 <div class="input-wrap">
-                    <i class="ti ti-tag input-icon"></i>
-                    <input asp-for="Nombre" class="field-input" autocomplete="off" />
+                    <i class="ti ti-user input-icon"></i>
+                    <input asp-for="Username" class="field-input" placeholder="Ej: juan.perez" autocomplete="off" />
                 </div>
-                <span asp-validation-for="Nombre" class="field-error"></span>
             </div>
 
             <div class="field-group">
-                <label class="field-label" asp-for="Descripcion">Descripción</label>
+                <label class="field-label">Contraseña</label>
                 <div class="input-wrap">
-                    <i class="ti ti-file-description input-icon"></i>
-                    <input asp-for="Descripcion" class="field-input" autocomplete="off" />
+                    <i class="ti ti-lock input-icon"></i>
+                    <input asp-for="Password" type="password" class="field-input" placeholder="Mínimo 6 caracteres" />
                 </div>
-                <span asp-validation-for="Descripcion" class="field-error"></span>
+            </div>
+
+            <div class="field-group">
+                <label class="field-label">Confirmar contraseña</label>
+                <div class="input-wrap">
+                    <i class="ti ti-lock-check input-icon"></i>
+                    <input asp-for="ConfirmarPassword" type="password" class="field-input" placeholder="Repetí la contraseña" />
+                </div>
             </div>
 
             <div class="form-actions">
                 <button type="submit" class="btn-primary-action">
-                    <i class="ti ti-check"></i> Guardar cambios
+                    <i class="ti ti-check"></i> Crear usuario
                 </button>
                 <a asp-action="Index" class="btn-secondary-action">
                     <i class="ti ti-arrow-left"></i> Cancelar
@@ -91,16 +96,11 @@
         width: 46px;
         height: 46px;
         border-radius: 12px;
-        background: linear-gradient(135deg, #6366f1, #8b5cf6);
+        background: linear-gradient(135deg,#6366f1,#8b5cf6);
         font-size: 1.4rem;
         color: white;
         flex-shrink: 0;
-        box-shadow: 0 4px 12px rgba(99,102,241,0.4);
-    }
-
-    .edit-icon {
-        background: linear-gradient(135deg, #0ea5e9, #6366f1);
-        box-shadow: 0 4px 12px rgba(14,165,233,0.35);
+        box-shadow: 0 4px 12px rgba(99,102,241,.4);
     }
 
     .form-eyebrow {
@@ -138,7 +138,6 @@
         gap: 0.6rem;
         padding: 0.7rem 1rem;
         font-size: 0.85rem;
-        border-radius: 0;
         border-bottom: 1px solid;
     }
 
@@ -184,7 +183,7 @@
         padding: 0.7rem 1rem 0.7rem 2.5rem;
         font-size: 0.875rem;
         outline: none;
-        transition: border-color 0.15s, box-shadow 0.15s;
+        transition: border-color .15s,box-shadow .15s;
         box-sizing: border-box;
     }
 
@@ -194,13 +193,8 @@
 
         .field-input:focus {
             border-color: #6366f1;
-            box-shadow: 0 0 0 3px rgba(99,102,241,0.18);
+            box-shadow: 0 0 0 3px rgba(99,102,241,.18);
         }
-
-    .field-error {
-        font-size: 0.78rem;
-        color: #f87171;
-    }
 
     .form-actions {
         display: flex;
@@ -214,7 +208,7 @@
         align-items: center;
         justify-content: center;
         gap: 0.4rem;
-        background: linear-gradient(135deg, #6366f1, #8b5cf6);
+        background: linear-gradient(135deg,#6366f1,#8b5cf6);
         color: white;
         border: none;
         border-radius: 10px;
@@ -222,12 +216,12 @@
         font-size: 0.875rem;
         font-weight: 600;
         cursor: pointer;
-        transition: opacity 0.15s, transform 0.1s;
-        box-shadow: 0 4px 14px rgba(99,102,241,0.3);
+        transition: opacity .15s,transform .1s;
+        box-shadow: 0 4px 14px rgba(99,102,241,.3);
     }
 
         .btn-primary-action:hover {
-            opacity: 0.9;
+            opacity: .9;
             transform: translateY(-1px);
         }
 
@@ -245,7 +239,7 @@
         font-size: 0.875rem;
         font-weight: 600;
         text-decoration: none;
-        transition: border-color 0.15s, color 0.15s;
+        transition: border-color .15s,color .15s;
     }
 
         .btn-secondary-action:hover {

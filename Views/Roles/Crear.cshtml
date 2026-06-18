@@ -1,39 +1,249 @@
+@using VillexMVC.Models
 @model Rol
-@{ ViewData["Title"] = "Nuevo Rol"; }
+@{
+    ViewData["Title"] = "Nuevo Rol";
+}
 
-<div class="row justify-content-center">
-    <div class="col-md-6">
-        <div class="card-villex p-4">
-            <div class="mb-4">
-                <h4 style="color:#6366f1; font-weight:700;"><i class="ti ti-shield-plus"></i> Nuevo Rol</h4>
-                <small class="text-secondary">Completa los datos para crear un rol</small>
+<div class="form-page-wrap">
+    <div class="form-card">
+
+        <div class="form-card-header">
+            <div class="form-icon-wrap">
+                <i class="ti ti-shield-plus"></i>
+            </div>
+            <div>
+                <div class="form-eyebrow">Roles del sistema</div>
+                <h4 class="form-title">Nuevo rol</h4>
+                <p class="form-subtitle">Completá los datos para registrar un nuevo rol</p>
+            </div>
+        </div>
+
+        @if (ViewBag.Error != null)
+        {
+            <div class="form-alert form-alert-danger">
+                <i class="ti ti-alert-circle"></i> @ViewBag.Error
+            </div>
+        }
+
+        <form asp-action="Crear" method="post" class="form-body">
+
+            <div class="field-group">
+                <label class="field-label" asp-for="Nombre">Nombre del rol</label>
+                <div class="input-wrap">
+                    <i class="ti ti-tag input-icon"></i>
+                    <input asp-for="Nombre" class="field-input" placeholder="Ej: Supervisor" autocomplete="off" />
+                </div>
+                <span asp-validation-for="Nombre" class="field-error"></span>
             </div>
 
-            @if (ViewBag.Error != null)
-            {
-                <div class="alert alert-danger d-flex align-items-center gap-2 mb-3">
-                    <i class="ti ti-alert-circle"></i> @ViewBag.Error
+            <div class="field-group">
+                <label class="field-label" asp-for="Descripcion">Descripción</label>
+                <div class="input-wrap">
+                    <i class="ti ti-file-description input-icon"></i>
+                    <input asp-for="Descripcion" class="field-input" placeholder="Ej: Acceso total al sistema" autocomplete="off" />
                 </div>
-            }
+                <span asp-validation-for="Descripcion" class="field-error"></span>
+            </div>
 
-            <form asp-action="Crear" method="post">
-                <div class="mb-3">
-                    <label class="form-label text-secondary">Nombre del rol</label>
-                    <input asp-for="Nombre" class="form-control" placeholder="Ej: Administrador" />
-                </div>
-                <div class="mb-4">
-                    <label class="form-label text-secondary">Descripcion</label>
-                    <input asp-for="Descripcion" class="form-control" placeholder="Ej: Acceso total al sistema" />
-                </div>
-                <div class="d-flex gap-2">
-                    <button type="submit" class="btn btn-villex flex-fill">
-                        <i class="ti ti-check"></i> Guardar
-                    </button>
-                    <a asp-action="Index" class="btn btn-outline-secondary flex-fill">
-                        <i class="ti ti-arrow-left"></i> Cancelar
-                    </a>
-                </div>
-            </form>
-        </div>
+            <div class="form-actions">
+                <button type="submit" class="btn-primary-action">
+                    <i class="ti ti-check"></i> Guardar rol
+                </button>
+                <a asp-action="Index" class="btn-secondary-action">
+                    <i class="ti ti-arrow-left"></i> Cancelar
+                </a>
+            </div>
+
+        </form>
     </div>
 </div>
+
+<style>
+    .form-page-wrap {
+        display: flex;
+        justify-content: center;
+        padding: 1rem 0 2rem;
+    }
+
+    .form-card {
+        background: #1e293b;
+        border: 1px solid #334155;
+        border-radius: 16px;
+        width: 100%;
+        max-width: 520px;
+        overflow: hidden;
+    }
+
+    .form-card-header {
+        display: flex;
+        align-items: flex-start;
+        gap: 1rem;
+        padding: 1.75rem 1.75rem 1.25rem;
+        border-bottom: 1px solid #334155;
+        background: #0f172a;
+    }
+
+    .form-icon-wrap {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 46px;
+        height: 46px;
+        border-radius: 12px;
+        background: linear-gradient(135deg, #6366f1, #8b5cf6);
+        font-size: 1.4rem;
+        color: white;
+        flex-shrink: 0;
+        box-shadow: 0 4px 12px rgba(99,102,241,0.4);
+    }
+
+    .form-eyebrow {
+        font-size: 0.7rem;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: #6366f1;
+        font-weight: 600;
+        margin-bottom: 0.15rem;
+    }
+
+    .form-title {
+        font-size: 1.2rem;
+        font-weight: 700;
+        color: #f8fafc;
+        margin: 0 0 0.15rem;
+    }
+
+    .form-subtitle {
+        font-size: 0.8rem;
+        color: #64748b;
+        margin: 0;
+    }
+
+    .form-body {
+        padding: 1.5rem 1.75rem 1.75rem;
+        display: flex;
+        flex-direction: column;
+        gap: 1.1rem;
+    }
+
+    .form-alert {
+        display: flex;
+        align-items: center;
+        gap: 0.6rem;
+        padding: 0.7rem 1rem;
+        font-size: 0.85rem;
+        border-radius: 0;
+        border-bottom: 1px solid;
+    }
+
+    .form-alert-danger {
+        background: #1c0a0a;
+        border-color: #7f1d1d;
+        color: #fca5a5;
+    }
+
+    .field-group {
+        display: flex;
+        flex-direction: column;
+        gap: 0.4rem;
+    }
+
+    .field-label {
+        font-size: 0.8rem;
+        font-weight: 600;
+        color: #94a3b8;
+        letter-spacing: 0.03em;
+    }
+
+    .input-wrap {
+        position: relative;
+    }
+
+    .input-icon {
+        position: absolute;
+        left: 0.85rem;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #475569;
+        font-size: 1rem;
+        pointer-events: none;
+    }
+
+    .field-input {
+        width: 100%;
+        background: #0f172a;
+        border: 1px solid #334155;
+        border-radius: 10px;
+        color: #f8fafc;
+        padding: 0.7rem 1rem 0.7rem 2.5rem;
+        font-size: 0.875rem;
+        outline: none;
+        transition: border-color 0.15s, box-shadow 0.15s;
+        box-sizing: border-box;
+    }
+
+        .field-input::placeholder {
+            color: #475569;
+        }
+
+        .field-input:focus {
+            border-color: #6366f1;
+            box-shadow: 0 0 0 3px rgba(99,102,241,0.18);
+        }
+
+    .field-error {
+        font-size: 0.78rem;
+        color: #f87171;
+    }
+
+    .form-actions {
+        display: flex;
+        gap: 0.75rem;
+        margin-top: 0.5rem;
+    }
+
+    .btn-primary-action {
+        flex: 1;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.4rem;
+        background: linear-gradient(135deg, #6366f1, #8b5cf6);
+        color: white;
+        border: none;
+        border-radius: 10px;
+        padding: 0.7rem 1rem;
+        font-size: 0.875rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: opacity 0.15s, transform 0.1s;
+        box-shadow: 0 4px 14px rgba(99,102,241,0.3);
+    }
+
+        .btn-primary-action:hover {
+            opacity: 0.9;
+            transform: translateY(-1px);
+        }
+
+    .btn-secondary-action {
+        flex: 1;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.4rem;
+        background: transparent;
+        color: #94a3b8;
+        border: 1px solid #334155;
+        border-radius: 10px;
+        padding: 0.7rem 1rem;
+        font-size: 0.875rem;
+        font-weight: 600;
+        text-decoration: none;
+        transition: border-color 0.15s, color 0.15s;
+    }
+
+        .btn-secondary-action:hover {
+            border-color: #475569;
+            color: #f8fafc;
+        }
+</style>

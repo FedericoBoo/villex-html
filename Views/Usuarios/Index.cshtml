@@ -1,17 +1,17 @@
-@using VillexMVC.Models
-@model List<Rol>
+﻿@using VillexMVC.Models
+@model List<UsuarioViewModel>
 @{
-    ViewData["Title"] = "Roles";
+    ViewData["Title"] = "Usuarios";
 }
 
 <div class="roles-header">
     <div>
-        <div class="roles-eyebrow">Sistema de permisos</div>
-        <h2 class="roles-title">Gestión de Roles</h2>
-        <p class="roles-subtitle">@Model.Count rol@(Model.Count != 1 ? "es" : "") registrado@(Model.Count != 1 ? "s" : "") en el sistema</p>
+        <div class="roles-eyebrow">Gestión de accesos</div>
+        <h2 class="roles-title">Usuarios del sistema</h2>
+        <p class="roles-subtitle">@Model.Count usuario@(Model.Count != 1 ? "s" : "") registrado@(Model.Count != 1 ? "s" : "")</p>
     </div>
     <a asp-action="Crear" class="btn-nuevo-rol">
-        <i class="ti ti-plus"></i> Nuevo rol
+        <i class="ti ti-user-plus"></i> Nuevo usuario
     </a>
 </div>
 
@@ -28,18 +28,13 @@
     </div>
 }
 
-<div class="search-bar-wrap">
-    <i class="ti ti-search search-icon"></i>
-    <input type="text" id="buscarRol" class="search-input" placeholder="Buscar por nombre o descripción…" oninput="filtrarRoles()" />
-</div>
-
 <div class="tabla-wrap">
-    <table class="tabla-roles" id="tablaRoles">
+    <table class="tabla-roles">
         <thead>
             <tr>
                 <th class="col-id">ID</th>
-                <th>Nombre</th>
-                <th>Descripción</th>
+                <th>Usuario</th>
+                <th>Contraseña</th>
                 <th class="col-acciones">Acciones</th>
             </tr>
         </thead>
@@ -48,30 +43,27 @@
             {
                 <tr>
                     <td colspan="4" class="empty-state">
-                        <i class="ti ti-shield-off empty-icon"></i>
-                        <p>No hay roles registrados.</p>
+                        <i class="ti ti-users empty-icon"></i>
+                        <p>No hay usuarios registrados.</p>
                         <a asp-action="Crear" class="btn-nuevo-rol btn-sm-nuevo">Crear el primero</a>
                     </td>
                 </tr>
             }
-            @foreach (var rol in Model)
+            @foreach (var u in Model)
             {
                 <tr>
-                    <td><span class="id-badge">#@rol.IdRol</span></td>
+                    <td><span class="id-badge">#@u.Id</span></td>
                     <td>
                         <div class="rol-nombre">
                             <span class="rol-dot"></span>
-                            @rol.Nombre
+                            @u.Username
                         </div>
                     </td>
-                    <td class="rol-desc">@rol.Descripcion</td>
+                    <td class="rol-desc">••••••••</td>
                     <td>
                         <div class="acciones-wrap">
-                            <a asp-action="Editar" asp-route-id="@rol.IdRol" class="btn-accion btn-editar" title="Editar">
-                                <i class="ti ti-pencil"></i>
-                            </a>
-                            <form asp-action="Eliminar" asp-route-id="@rol.IdRol" method="post" class="d-inline"
-                                  onsubmit="return confirm('¿Eliminar el rol «@rol.Nombre»?')">
+                            <form asp-action="Eliminar" asp-route-id="@u.Id" method="post" class="d-inline"
+                                  onsubmit="return confirm('¿Eliminar el usuario «@u.Username»?')">
                                 <button type="submit" class="btn-accion btn-eliminar" title="Eliminar">
                                     <i class="ti ti-trash"></i>
                                 </button>
@@ -106,10 +98,10 @@
     .roles-title {
         font-size: 1.75rem;
         font-weight: 800;
-        color: #000000 !important;
-        margin: 0 0 0.15rem 0;
+        color: #000 !important;
+        margin: 0 0 0.15rem;
         letter-spacing: -0.02em;
-        -webkit-text-fill-color: #000000;
+        -webkit-text-fill-color: #000;
     }
 
     .roles-subtitle {
@@ -122,7 +114,7 @@
         display: inline-flex;
         align-items: center;
         gap: 0.4rem;
-        background: linear-gradient(135deg, #6366f1, #8b5cf6);
+        background: linear-gradient(135deg,#6366f1,#8b5cf6);
         color: white;
         border: none;
         border-radius: 10px;
@@ -131,13 +123,13 @@
         font-weight: 600;
         text-decoration: none;
         cursor: pointer;
-        transition: opacity 0.15s, transform 0.1s;
+        transition: opacity .15s,transform .1s;
         white-space: nowrap;
-        box-shadow: 0 4px 14px rgba(99,102,241,0.35);
+        box-shadow: 0 4px 14px rgba(99,102,241,.35);
     }
 
         .btn-nuevo-rol:hover {
-            opacity: 0.9;
+            opacity: .9;
             transform: translateY(-1px);
             color: white;
         }
@@ -170,43 +162,6 @@
         color: #fca5a5;
     }
 
-    .search-bar-wrap {
-        position: relative;
-        margin-bottom: 1rem;
-    }
-
-    .search-icon {
-        position: absolute;
-        left: 0.9rem;
-        top: 50%;
-        transform: translateY(-50%);
-        color: #475569;
-        font-size: 0.95rem;
-        pointer-events: none;
-    }
-
-    .search-input {
-        width: 100%;
-        background: #1e293b;
-        border: 1px solid #334155;
-        border-radius: 10px;
-        color: #f8fafc;
-        padding: 0.55rem 1rem 0.55rem 2.4rem;
-        font-size: 0.85rem;
-        transition: border-color 0.15s, box-shadow 0.15s;
-        outline: none;
-        box-sizing: border-box;
-    }
-
-        .search-input::placeholder {
-            color: #475569;
-        }
-
-        .search-input:focus {
-            border-color: #6366f1;
-            box-shadow: 0 0 0 3px rgba(99,102,241,0.18);
-        }
-
     .tabla-wrap {
         background: #1e293b;
         border: 1px solid #334155;
@@ -238,13 +193,13 @@
     }
 
     .col-acciones {
-        width: 100px;
+        width: 80px;
         text-align: center;
     }
 
     .tabla-roles tbody tr {
         border-bottom: 1px solid #243044;
-        transition: background 0.12s;
+        transition: background .12s;
     }
 
         .tabla-roles tbody tr:last-child {
@@ -312,19 +267,13 @@
         background: transparent;
         cursor: pointer;
         font-size: 0.85rem;
-        transition: background 0.13s, border-color 0.13s, color 0.13s;
+        transition: background .13s,border-color .13s,color .13s;
         text-decoration: none;
         color: #94a3b8;
     }
 
-    .btn-editar:hover {
-        background: rgba(99,102,241,0.15);
-        border-color: #6366f1;
-        color: #818cf8;
-    }
-
     .btn-eliminar:hover {
-        background: rgba(239,68,68,0.12);
+        background: rgba(239,68,68,.12);
         border-color: #ef4444;
         color: #f87171;
     }
@@ -339,25 +288,11 @@
         font-size: 2rem;
         display: block;
         margin-bottom: 0.6rem;
-        opacity: 0.4;
+        opacity: .4;
     }
 
     .empty-state p {
         margin-bottom: 0.2rem;
         font-size: 0.85rem;
     }
-
-    .hidden-row {
-        display: none;
-    }
 </style>
-
-<script>
-    function filtrarRoles() {
-        const q = document.getElementById('buscarRol').value.toLowerCase();
-        document.querySelectorAll('#tablaRoles tbody tr').forEach(tr => {
-            const texto = tr.innerText.toLowerCase();
-            tr.classList.toggle('hidden-row', q.length > 0 && !texto.includes(q));
-        });
-    }
-</script>
