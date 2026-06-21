@@ -98,6 +98,11 @@
                     color: white;
                 }
 
+                .btn-ingresar:disabled {
+                    background-color: #334155;
+                    cursor: not-allowed;
+                }
+
             footer {
                 position: fixed;
                 bottom: 10px;
@@ -105,6 +110,20 @@
                 text-align: center;
                 color: #334155;
                 font-size: 12px;
+            }
+
+            .sesion-ok {
+                width: 390px;
+                margin-top: 1rem;
+                padding: 0.7rem 1rem;
+                border-radius: 10px;
+                background: #052e16;
+                border: 1px solid #166534;
+                color: #86efac;
+                font-size: 0.85rem;
+                display: flex;
+                align-items: center;
+                gap: 0.5rem;
             }
 
             .accesos-rapidos {
@@ -130,6 +149,7 @@
                 font-size: 0.8rem;
                 font-weight: 600;
                 transition: border-color 0.15s, color 0.15s, background 0.15s;
+                cursor: pointer;
             }
 
                 .acceso-btn i {
@@ -147,6 +167,17 @@
                     font-size: 0.72rem;
                     font-weight: 400;
                 }
+
+                .acceso-btn.bloqueado {
+                    opacity: 0.4;
+                    cursor: not-allowed;
+                }
+
+                    .acceso-btn.bloqueado:hover {
+                        border-color: #334155;
+                        color: #94a3b8;
+                        background: #1e293b;
+                    }
     </style>
 </head>
 <body>
@@ -177,17 +208,45 @@
         }
     </div>
 
+    @{
+        var sesionActiva = Context.Session.GetString("Usuario") != null;
+    }
+
+    @if (sesionActiva)
+    {
+        <div class="sesion-ok">
+            <i class="ti ti-circle-check"></i>
+            Sesión activa como <strong>@Context.Session.GetString("Usuario")</strong>. Elegí a dónde ir:
+        </div>
+    }
+
     <div class="accesos-rapidos">
-        <a href="/Usuarios" class="acceso-btn">
-            <i class="ti ti-users"></i>
-            Gestión de Usuarios
-            <span>Crear y administrar usuarios</span>
-        </a>
-        <a href="/Roles" class="acceso-btn">
-            <i class="ti ti-shield"></i>
-            Gestión de Roles
-            <span>Crear y administrar roles</span>
-        </a>
+        @if (sesionActiva)
+        {
+            <a href="/Usuarios" class="acceso-btn">
+                <i class="ti ti-users"></i>
+                Gestión de Usuarios
+                <span>Crear y administrar usuarios</span>
+            </a>
+            <a href="/Roles" class="acceso-btn">
+                <i class="ti ti-shield"></i>
+                Gestión de Roles
+                <span>Crear y administrar roles</span>
+            </a>
+        }
+        else
+        {
+            <div class="acceso-btn bloqueado" title="Iniciá sesión primero">
+                <i class="ti ti-lock"></i>
+                Gestión de Usuarios
+                <span>Iniciá sesión para acceder</span>
+            </div>
+            <div class="acceso-btn bloqueado" title="Iniciá sesión primero">
+                <i class="ti ti-lock"></i>
+                Gestión de Roles
+                <span>Iniciá sesión para acceder</span>
+            </div>
+        }
     </div>
 
     <footer>© 2026 Villex — Todos los derechos reservados.</footer>

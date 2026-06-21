@@ -1,0 +1,235 @@
+﻿@using VillexMVC.Models
+@model UsuarioViewModel
+@{
+    ViewData["Title"] = "Editar Usuario";
+}
+
+<div class="form-page-wrap">
+    <div class="form-card">
+
+        <div class="form-card-header">
+            <div class="form-icon-wrap edit-icon">
+                <i class="ti ti-pencil"></i>
+            </div>
+            <div>
+                <div class="form-eyebrow">Gestión de accesos</div>
+                <h4 class="form-title">Editar usuario</h4>
+                <p class="form-subtitle">Modificá el nombre del usuario seleccionado</p>
+            </div>
+        </div>
+
+        @if (ViewBag.Error != null)
+        {
+            <div class="form-alert form-alert-danger">
+                <i class="ti ti-alert-circle"></i> @ViewBag.Error
+            </div>
+        }
+
+        <form asp-action="Editar" method="post" class="form-body">
+            <input type="hidden" asp-for="Id" />
+
+            <div class="field-group">
+                <label class="field-label">Nombre de usuario</label>
+                <div class="input-wrap">
+                    <i class="ti ti-user input-icon"></i>
+                    <input asp-for="Username" class="field-input" autocomplete="off" />
+                </div>
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn-primary-action">
+                    <i class="ti ti-check"></i> Guardar cambios
+                </button>
+                <a asp-action="Index" class="btn-secondary-action">
+                    <i class="ti ti-arrow-left"></i> Cancelar
+                </a>
+            </div>
+
+        </form>
+    </div>
+</div>
+
+<style>
+    .form-page-wrap {
+        display: flex;
+        justify-content: center;
+        padding: 1rem 0 2rem;
+    }
+
+    .form-card {
+        background: #1e293b;
+        border: 1px solid #334155;
+        border-radius: 16px;
+        width: 100%;
+        max-width: 520px;
+        overflow: hidden;
+    }
+
+    .form-card-header {
+        display: flex;
+        align-items: flex-start;
+        gap: 1rem;
+        padding: 1.75rem 1.75rem 1.25rem;
+        border-bottom: 1px solid #334155;
+        background: #0f172a;
+    }
+
+    .form-icon-wrap {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 46px;
+        height: 46px;
+        border-radius: 12px;
+        background: linear-gradient(135deg, #6366f1, #8b5cf6);
+        font-size: 1.4rem;
+        color: white;
+        flex-shrink: 0;
+        box-shadow: 0 4px 12px rgba(99,102,241,0.4);
+    }
+
+    .edit-icon {
+        background: linear-gradient(135deg, #0ea5e9, #6366f1);
+        box-shadow: 0 4px 12px rgba(14,165,233,0.35);
+    }
+
+    .form-eyebrow {
+        font-size: 0.7rem;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: #6366f1;
+        font-weight: 600;
+        margin-bottom: 0.15rem;
+    }
+
+    .form-title {
+        font-size: 1.2rem;
+        font-weight: 700;
+        color: #f8fafc;
+        margin: 0 0 0.15rem;
+    }
+
+    .form-subtitle {
+        font-size: 0.8rem;
+        color: #64748b;
+        margin: 0;
+    }
+
+    .form-body {
+        padding: 1.5rem 1.75rem 1.75rem;
+        display: flex;
+        flex-direction: column;
+        gap: 1.1rem;
+    }
+
+    .form-alert {
+        display: flex;
+        align-items: center;
+        gap: 0.6rem;
+        padding: 0.7rem 1rem;
+        font-size: 0.85rem;
+        border-bottom: 1px solid;
+    }
+
+    .form-alert-danger {
+        background: #1c0a0a;
+        border-color: #7f1d1d;
+        color: #fca5a5;
+    }
+
+    .field-group {
+        display: flex;
+        flex-direction: column;
+        gap: 0.4rem;
+    }
+
+    .field-label {
+        font-size: 0.8rem;
+        font-weight: 600;
+        color: #94a3b8;
+        letter-spacing: 0.03em;
+    }
+
+    .input-wrap {
+        position: relative;
+    }
+
+    .input-icon {
+        position: absolute;
+        left: 0.85rem;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #475569;
+        font-size: 1rem;
+        pointer-events: none;
+    }
+
+    .field-input {
+        width: 100%;
+        background: #0f172a;
+        border: 1px solid #334155;
+        border-radius: 10px;
+        color: #f8fafc;
+        padding: 0.7rem 1rem 0.7rem 2.5rem;
+        font-size: 0.875rem;
+        outline: none;
+        transition: border-color .15s, box-shadow .15s;
+        box-sizing: border-box;
+    }
+
+        .field-input:focus {
+            border-color: #6366f1;
+            box-shadow: 0 0 0 3px rgba(99,102,241,.18);
+        }
+
+    .form-actions {
+        display: flex;
+        gap: 0.75rem;
+        margin-top: 0.5rem;
+    }
+
+    .btn-primary-action {
+        flex: 1;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.4rem;
+        background: linear-gradient(135deg, #6366f1, #8b5cf6);
+        color: white;
+        border: none;
+        border-radius: 10px;
+        padding: 0.7rem 1rem;
+        font-size: 0.875rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: opacity .15s, transform .1s;
+        box-shadow: 0 4px 14px rgba(99,102,241,.3);
+    }
+
+        .btn-primary-action:hover {
+            opacity: .9;
+            transform: translateY(-1px);
+        }
+
+    .btn-secondary-action {
+        flex: 1;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.4rem;
+        background: transparent;
+        color: #94a3b8;
+        border: 1px solid #334155;
+        border-radius: 10px;
+        padding: 0.7rem 1rem;
+        font-size: 0.875rem;
+        font-weight: 600;
+        text-decoration: none;
+        transition: border-color .15s, color .15s;
+    }
+
+        .btn-secondary-action:hover {
+            border-color: #475569;
+            color: #f8fafc;
+        }
+</style>

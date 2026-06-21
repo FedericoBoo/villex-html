@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
+using System.Text.RegularExpressions;
 using VillexMVC.Models;
 
 namespace VillexMVC.Controllers
@@ -69,6 +70,12 @@ namespace VillexMVC.Controllers
                 return View(model);
             }
 
+            if (!Regex.IsMatch(model.Username.Trim(), @"^[a-zA-ZÁÉÍÓÚáéíóúÑñ\s\.]+$"))
+            {
+                ViewBag.Error = "El nombre de usuario no puede contener números ni símbolos, solo letras.";
+                return View(model);
+            }
+
             if (model.Password != model.ConfirmarPassword)
             {
                 ViewBag.Error = "Las contraseñas no coinciden.";
@@ -96,6 +103,91 @@ namespace VillexMVC.Controllers
                 cmd.ExecuteNonQuery();
 
                 TempData["Exito"] = "Usuario creado correctamente.";
+                return RedirectToAction("Index");
+            }
+            catch (Exception ex)
+            {
+                ViewBag.Error = "Error: " + ex.Message;
+                return View(model);
+            }
+        }
+
+        [HttpGet]
+        public IActionResult Editar(int id)
+        {
+            if (!SesionActiva()) return RedirectToAction("Index", "Login");
+
+            UsuarioViewModel? usuario = null;
+            try
+            {
+                using SqlConnection conn = GetConnection();
+                conn.Open();
+                string query = "SELECT IdUsuario, Usuario FROM Usuarios WHERE IdUsuario = @Id";
+                using SqlCommand cmd = new SqlCommand(query, conn);
+                cmd.Parameters.AddWithValue("@Id", id);
+                using SqlDataReader reader = cmd.ExecuteReader();
+                if (reader.Read())
+                {
+                    usuario = new UsuarioViewModel
+                    {
+                        Id = (int)reader["IdUsuario"],
+                        Username = reader["Usuario"].ToString()!
+                    };
+                }
+            }
+            catch (Exception ex)
+            {
+                ViewBag.Error = "Error al cargar usuario: " + ex.Message;
+            }
+
+            if (usuario == null)
+            {
+                TempData["Error"] = "Usuario no encontrado.";
+                return RedirectToAction("Index");
+            }
+
+            return View(usuario);
+        }
+
+        [HttpPost]
+        public IActionResult Editar(UsuarioViewModel model)
+        {
+            if (!SesionActiva()) return RedirectToAction("Index", "Login");
+
+            if (string.IsNullOrWhiteSpace(model.Username))
+            {
+                ViewBag.Error = "El nombre de usuario es obligatorio.";
+                return View(model);
+            }
+
+            if (!Regex.IsMatch(model.Username.Trim(), @"^[a-zA-ZÁÉÍÓÚáéíóúÑñ\s\.]+$"))
+            {
+                ViewBag.Error = "El nombre de usuario no puede contener números ni símbolos, solo letras.";
+                return View(model);
+            }
+
+            try
+            {
+                using SqlConnection conn = GetConnection();
+                conn.Open();
+
+                string check = "SELECT COUNT(*) FROM Usuarios WHERE Usuario = @Usuario AND IdUsuario <> @Id";
+                using SqlCommand checkCmd = new SqlCommand(check, conn);
+                checkCmd.Parameters.AddWithValue("@Usuario", model.Username.Trim());
+                checkCmd.Parameters.AddWithValue("@Id", model.Id);
+                if ((int)checkCmd.ExecuteScalar() > 0)
+                {
+                    ViewBag.Error = "Ya existe otro usuario con ese nombre.";
+                    return View(model);
+                }
+
+                string query = "UPDATE Usuarios SET Usuario = @Usuario WHERE IdUsuario = @Id";
+                using SqlCommand cmd = new SqlCommand(query, conn);
+                cmd.Parameters.AddWithValue("@Usuario", model.Username.Trim());
+                cmd.Parameters.AddWithValue("@Id", model.Id);
+                cmd.ExecuteNonQuery();
+
+                TempData["Exito"] = "Usuario actualizado correctamente.";
                 return RedirectToAction("Index");
             }
             catch (Exception ex)

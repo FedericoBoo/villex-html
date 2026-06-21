@@ -4,15 +4,9 @@
     ViewData["Title"] = "Roles";
 }
 
-<div class="roles-header">
-    <div>
-        <div class="roles-eyebrow">Sistema de permisos</div>
-        <h2 class="roles-title">Gestión de Roles</h2>
-        <p class="roles-subtitle">@Model.Count rol@(Model.Count != 1 ? "es" : "") registrado@(Model.Count != 1 ? "s" : "") en el sistema</p>
-    </div>
-    <a asp-action="Crear" class="btn-nuevo-rol">
-        <i class="ti ti-plus"></i> Nuevo rol
-    </a>
+<div class="roles-header-full">
+    <div class="roles-eyebrow">Sistema de permisos</div>
+    <h2 class="roles-title-full">Gestión de Roles</h2>
 </div>
 
 @if (TempData["Exito"] != null)
@@ -28,10 +22,21 @@
     </div>
 }
 
-<div class="search-bar-wrap">
-    <i class="ti ti-search search-icon"></i>
-    <input type="text" id="buscarRol" class="search-input" placeholder="Buscar por nombre o descripción…" oninput="filtrarRoles()" />
+<div class="toolbar-row">
+    <div class="search-bar-wrap">
+        <i class="ti ti-search search-icon"></i>
+        <input type="text" id="buscarRol" class="search-input" placeholder="Buscar por nombre o descripción…" oninput="filtrarRoles()" />
+    </div>
+    <a asp-action="Crear" class="btn-nuevo-rol">
+        <svg class="icon-plus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 5v14M5 12h14" /></svg>
+        Nuevo rol
+    </a>
 </div>
+
+<p class="roles-subtitle">
+    <span class="badge-count">@Model.Count</span>
+    rol@(Model.Count != 1 ? "es" : "") registrado@(Model.Count != 1 ? "s" : "") en el sistema
+</p>
 
 <div class="tabla-wrap">
     <table class="tabla-roles" id="tablaRoles">
@@ -48,7 +53,6 @@
             {
                 <tr>
                     <td colspan="4" class="empty-state">
-                        <i class="ti ti-shield-off empty-icon"></i>
                         <p>No hay roles registrados.</p>
                         <a asp-action="Crear" class="btn-nuevo-rol btn-sm-nuevo">Crear el primero</a>
                     </td>
@@ -68,12 +72,15 @@
                     <td>
                         <div class="acciones-wrap">
                             <a asp-action="Editar" asp-route-id="@rol.IdRol" class="btn-accion btn-editar" title="Editar">
-                                <i class="ti ti-pencil"></i>
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
+                                    <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
+                                </svg>
                             </a>
                             <form asp-action="Eliminar" asp-route-id="@rol.IdRol" method="post" class="d-inline"
                                   onsubmit="return confirm('¿Eliminar el rol «@rol.Nombre»?')">
                                 <button type="submit" class="btn-accion btn-eliminar" title="Eliminar">
-                                    <i class="ti ti-trash"></i>
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12" /></svg>
                                 </button>
                             </form>
                         </div>
@@ -85,77 +92,43 @@
 </div>
 
 <style>
-    .roles-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: flex-end;
-        margin-bottom: 1.25rem;
-        gap: 1rem;
-        flex-wrap: wrap;
+    .roles-header-full {
+        width: 100%;
+        margin-bottom: 2rem;
+        text-align: center;
+        background: linear-gradient(135deg, #6366f1, #7c3aed);
+        border-radius: 16px;
+        padding: 2.5rem 1.5rem;
+        box-shadow: 0 8px 24px rgba(99,102,241,0.3);
     }
 
     .roles-eyebrow {
-        font-size: 0.7rem;
-        letter-spacing: 0.12em;
+        font-size: 0.8rem;
+        letter-spacing: 0.16em;
         text-transform: uppercase;
-        color: #6366f1;
-        font-weight: 600;
-        margin-bottom: 0.15rem;
+        color: #e0e7ff;
+        font-weight: 700;
+        margin-bottom: 0.5rem;
     }
 
-    .roles-title {
-        font-size: 1.75rem;
+    .roles-title-full {
+        font-size: 3rem;
         font-weight: 800;
-        color: #000000 !important;
-        margin: 0 0 0.15rem 0;
-        letter-spacing: -0.02em;
-        -webkit-text-fill-color: #000000;
-    }
-
-    .roles-subtitle {
-        font-size: 0.82rem;
-        color: #64748b;
+        color: #ffffff !important;
+        -webkit-text-fill-color: #ffffff;
         margin: 0;
-    }
-
-    .btn-nuevo-rol {
-        display: inline-flex;
-        align-items: center;
-        gap: 0.4rem;
-        background: linear-gradient(135deg, #6366f1, #8b5cf6);
-        color: white;
-        border: none;
-        border-radius: 10px;
-        padding: 0.55rem 1.1rem;
-        font-size: 0.85rem;
-        font-weight: 600;
-        text-decoration: none;
-        cursor: pointer;
-        transition: opacity 0.15s, transform 0.1s;
-        white-space: nowrap;
-        box-shadow: 0 4px 14px rgba(99,102,241,0.35);
-    }
-
-        .btn-nuevo-rol:hover {
-            opacity: 0.9;
-            transform: translateY(-1px);
-            color: white;
-        }
-
-    .btn-sm-nuevo {
-        padding: 0.4rem 0.9rem;
-        font-size: 0.78rem;
-        margin-top: 0.6rem;
+        letter-spacing: -0.02em;
+        text-shadow: 0 2px 12px rgba(0,0,0,0.25);
     }
 
     .alert-villex {
         display: flex;
         align-items: center;
-        gap: 0.6rem;
-        padding: 0.65rem 1rem;
+        gap: 0.7rem;
+        padding: 0.9rem 1.2rem;
         border-radius: 10px;
-        font-size: 0.85rem;
-        margin-bottom: 1rem;
+        font-size: 0.9rem;
+        margin-bottom: 1.5rem;
     }
 
     .alert-villex-success {
@@ -170,18 +143,25 @@
         color: #fca5a5;
     }
 
+    .toolbar-row {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        margin-bottom: 0.75rem;
+    }
+
     .search-bar-wrap {
         position: relative;
-        margin-bottom: 1rem;
+        flex: 1;
     }
 
     .search-icon {
         position: absolute;
-        left: 0.9rem;
+        left: 1.1rem;
         top: 50%;
         transform: translateY(-50%);
         color: #475569;
-        font-size: 0.95rem;
+        font-size: 1.05rem;
         pointer-events: none;
     }
 
@@ -191,8 +171,8 @@
         border: 1px solid #334155;
         border-radius: 10px;
         color: #f8fafc;
-        padding: 0.55rem 1rem 0.55rem 2.4rem;
-        font-size: 0.85rem;
+        padding: 0.85rem 1.2rem 0.85rem 2.9rem;
+        font-size: 0.9rem;
         transition: border-color 0.15s, box-shadow 0.15s;
         outline: none;
         box-sizing: border-box;
@@ -207,10 +187,69 @@
             box-shadow: 0 0 0 3px rgba(99,102,241,0.18);
         }
 
+    .btn-nuevo-rol {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        background: linear-gradient(135deg, #6366f1, #8b5cf6);
+        color: white;
+        border: none;
+        border-radius: 10px;
+        padding: 0.85rem 1.5rem;
+        font-size: 0.9rem;
+        font-weight: 600;
+        text-decoration: none;
+        cursor: pointer;
+        transition: opacity 0.15s, transform 0.1s;
+        white-space: nowrap;
+        box-shadow: 0 4px 14px rgba(99,102,241,0.35);
+        flex-shrink: 0;
+    }
+
+        .btn-nuevo-rol:hover {
+            opacity: 0.9;
+            transform: translateY(-1px);
+            color: white;
+        }
+
+    .btn-sm-nuevo {
+        padding: 0.55rem 1.1rem;
+        font-size: 0.85rem;
+        margin-top: 0.85rem;
+    }
+
+    .icon-plus {
+        width: 16px;
+        height: 16px;
+        flex-shrink: 0;
+    }
+
+    .roles-subtitle {
+        font-size: 0.9rem;
+        color: #94a3b8;
+        margin: 0 0 1.5rem 0;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .badge-count {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        background: linear-gradient(135deg, #6366f1, #8b5cf6);
+        color: white;
+        font-size: 0.78rem;
+        font-weight: 700;
+        padding: 0.15rem 0.6rem;
+        border-radius: 20px;
+        min-width: 26px;
+    }
+
     .tabla-wrap {
         background: #1e293b;
         border: 1px solid #334155;
-        border-radius: 12px;
+        border-radius: 14px;
         overflow: hidden;
     }
 
@@ -225,20 +264,20 @@
         }
 
         .tabla-roles thead th {
-            padding: 0.65rem 1rem;
-            font-size: 0.7rem;
+            padding: 1.1rem 1.5rem;
+            font-size: 0.78rem;
             font-weight: 700;
-            letter-spacing: 0.07em;
+            letter-spacing: 0.08em;
             text-transform: uppercase;
             color: #94a3b8;
         }
 
     .col-id {
-        width: 60px;
+        width: 90px;
     }
 
     .col-acciones {
-        width: 100px;
+        width: 130px;
         text-align: center;
     }
 
@@ -256,8 +295,8 @@
         }
 
     .tabla-roles tbody td {
-        padding: 0.45rem 1rem;
-        font-size: 0.82rem;
+        padding: 1.25rem 1.5rem;
+        font-size: 0.92rem;
         vertical-align: middle;
         color: #cbd5e1;
     }
@@ -266,9 +305,9 @@
         display: inline-block;
         background: #0f172a;
         border: 1px solid #334155;
-        border-radius: 5px;
-        padding: 0.1rem 0.4rem;
-        font-size: 0.72rem;
+        border-radius: 6px;
+        padding: 0.25rem 0.6rem;
+        font-size: 0.8rem;
         color: #64748b;
         font-family: monospace;
     }
@@ -276,46 +315,51 @@
     .rol-nombre {
         display: flex;
         align-items: center;
-        gap: 0.5rem;
+        gap: 0.7rem;
         font-weight: 600;
-        font-size: 0.82rem;
+        font-size: 0.92rem;
         color: #f1f5f9;
     }
 
     .rol-dot {
-        width: 6px;
-        height: 6px;
+        width: 8px;
+        height: 8px;
         border-radius: 50%;
         background: #6366f1;
         flex-shrink: 0;
     }
 
     .rol-desc {
-        color: #64748b;
-        font-size: 0.8rem;
+        color: #94a3b8;
+        font-size: 0.88rem;
     }
 
     .acciones-wrap {
         display: flex;
         justify-content: center;
-        gap: 0.35rem;
+        gap: 0.5rem;
     }
 
     .btn-accion {
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        width: 28px;
-        height: 28px;
-        border-radius: 7px;
-        border: 1px solid transparent;
-        background: transparent;
+        width: 36px;
+        height: 36px;
+        border-radius: 8px;
+        border: 1px solid #334155;
+        background: #0f172a;
         cursor: pointer;
-        font-size: 0.85rem;
         transition: background 0.13s, border-color 0.13s, color 0.13s;
         text-decoration: none;
         color: #94a3b8;
     }
+
+        .btn-accion svg {
+            width: 16px;
+            height: 16px;
+            flex-shrink: 0;
+        }
 
     .btn-editar:hover {
         background: rgba(99,102,241,0.15);
@@ -324,28 +368,21 @@
     }
 
     .btn-eliminar:hover {
-        background: rgba(239,68,68,0.12);
+        background: rgba(239,68,68,0.15);
         border-color: #ef4444;
         color: #f87171;
     }
 
     .empty-state {
         text-align: center;
-        padding: 2.5rem 1rem !important;
+        padding: 4rem 1.5rem !important;
         color: #475569;
     }
 
-    .empty-icon {
-        font-size: 2rem;
-        display: block;
-        margin-bottom: 0.6rem;
-        opacity: 0.4;
-    }
-
-    .empty-state p {
-        margin-bottom: 0.2rem;
-        font-size: 0.85rem;
-    }
+        .empty-state p {
+            margin-bottom: 0.4rem;
+            font-size: 0.9rem;
+        }
 
     .hidden-row {
         display: none;

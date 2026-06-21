@@ -38,7 +38,7 @@ namespace VillexMVC.Controllers
                 if (count > 0)
                 {
                     HttpContext.Session.SetString("Usuario", model.Username);
-                    return RedirectToAction("Index", "Roles");
+                    return View(new LoginViewModel());
                 }
 
                 ViewBag.Error = "Usuario o contrasena incorrectos.";
